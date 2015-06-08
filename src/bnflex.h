@@ -1,3 +1,13 @@
+/*!
+ * \author      Giancarlo Villanueva
+ * \date        Created,  6/1/2015
+ *              Modified, 6/8/2015
+ * \ingroup     bnfll1
+ * \file        bnflex.h
+ *
+ * \brief       Declares the structure of the Backus-Naur Form lexical analyzer
+ *              class.
+ */
 #ifndef BNFLEX_H
 #define BNFLEX_H
 

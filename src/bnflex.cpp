@@ -1,3 +1,13 @@
+/*!
+ * \author      Giancarlo Villanueva
+ * \date        Created,  6/1/2015
+ *              Modified, 6/8/2015
+ * \ingroup     bnfll1
+ * \file        bnflex.cpp
+ *
+ * \brief       Defines the methods of the Backus-Naur Form lexical analyzer
+ *              class.
+ */
 #include "bnflex.h"
 #include "token.h"
 #include <stdio.h>
@@ -46,6 +56,8 @@ TokenList* BnfLex::analyze(std::istream &istream, const char *filename)
 
                 if (ch == '|')
                     tokens->push_back(Token("|", "|", filename, line, col));
+                else if (ch == ';')
+                    tokens->push_back(Token(";", ";", filename, line, col));
                 else if (ch == '<')
                     state = NONTERMINAL_START;
                 else if (ch == '"')
