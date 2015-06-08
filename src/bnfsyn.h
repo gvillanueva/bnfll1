@@ -25,7 +25,7 @@ public:
     bool analyze(const TokenList& tokens);
 
 private:
-    bool readLexeme(std::string lexeme);
+    bool readType(std::string lexeme);
     bool syntax();
     bool rule();
     bool expression();

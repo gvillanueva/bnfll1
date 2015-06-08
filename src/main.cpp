@@ -14,11 +14,17 @@ int main(int argc, char *argv[])
 
     // Ensure filename is defined
     if (argc < 2)
-        return NULL;
+        return -1;
 
     filename = argv[1];
     std::ifstream stream(filename);
     TokenList *tokens = lex.analyze(stream, filename);
+
+    /// Error checking of lexical analyzer??
+    if (tokens->size() <= 0)
+        return -2;
+    else
+        syn.analyze(*tokens);
 
     return 0;
 }

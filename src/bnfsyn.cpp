@@ -20,9 +20,9 @@ bool BnfSyn::analyze(const TokenList& tokens)
     return syntax();
 }
 
-bool BnfSyn::readLexeme(std::string lexeme)
+bool BnfSyn::readType(std::string type)
 {
-    return (*m_Iter).lexeme() == lexeme;
+    return (*m_Iter++).type() == type;
 }
 
 bool BnfSyn::syntax()
@@ -39,10 +39,10 @@ bool BnfSyn::syntax()
 
 bool BnfSyn::rule()
 {
-    if (readLexeme("NONTERM"))
-        if (readLexeme("::="))
+    if (readType("NONTERM"))
+        if (readType("::="))
             if (expression())
-                if (readLexeme(";"))
+                if (readType(";"))
                     return true;
 
     return false;
@@ -51,7 +51,7 @@ bool BnfSyn::rule()
 bool BnfSyn::expression()
 {
     if (list()) {
-        if (readLexeme("|")) {
+        if (readType("|")) {
             if (expression()) {
                 return true;
             }

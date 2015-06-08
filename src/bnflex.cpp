@@ -43,7 +43,7 @@ TokenList* BnfLex::analyze(std::istream &istream, const char *filename)
     int col = 0;
 
     std::string token;      /// Token being parsed
-    std::string error;      /// Error string
+    //std::string error;      /// Error string
     TokenList *tokens = new TokenList;
 
     while (istream.get(ch) || token.length() && (ch = ' '))
