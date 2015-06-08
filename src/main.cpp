@@ -23,8 +23,12 @@ int main(int argc, char *argv[])
     /// Error checking of lexical analyzer??
     if (tokens->size() <= 0)
         return -2;
-    else
-        syn.analyze(*tokens);
+    else {
+        if (syn.analyze(*tokens))
+            std::cout << "Pass" << std::endl;
+        else
+            std::cout << "Fail" << std::endl;
+    }
 
     return 0;
 }

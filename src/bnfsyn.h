@@ -35,6 +35,7 @@ private:
     bool literal();
 
     std::list<Token>::const_iterator m_Iter;
+    std::list<Token>::const_iterator m_IterEnd;
 };
 
 #endif // BNFSYN_H

@@ -17,22 +17,29 @@ BnfSyn::BnfSyn()//const TokenList& tokens)
 bool BnfSyn::analyze(const TokenList& tokens)
 {
     m_Iter = tokens.begin();
+    m_IterEnd = tokens.end();
     return syntax();
 }
 
 bool BnfSyn::readType(std::string type)
 {
-    return (*m_Iter++).type() == type;
+    if (m_Iter == m_IterEnd)
+        return false;
+
+    if ((*m_Iter).type() == type) {
+        m_Iter++;
+        return true;
+    }
+
+    return false;
 }
 
 bool BnfSyn::syntax()
 {
     if (rule()) {
-        if (syntax())
-            return true;
-    }
-    else
+        syntax();
         return true;
+    }
 
     return false;
 }
@@ -69,10 +76,17 @@ bool BnfSyn::expression()
 
 bool BnfSyn::list()
 {
-//    if (readLexeme("TERM") || readLexeme("NONTERM"))
-//        if ()
+    if (term()) {
+        while (term());
+        return true;
+    }
 
     return false;
+}
+
+bool BnfSyn::term()
+{
+    return readType("TERM") || readType("NONTERM");
 }
 
 /// Convert EBNF to BNF
