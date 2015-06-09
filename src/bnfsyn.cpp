@@ -90,7 +90,6 @@ bool BnfSyn::term()
 }
 
 /// Convert EBNF to BNF
-/// Remove Lambda productions
-/// Remove unit productions
-/// Left factor grammar
+/// Remove Lambda productions?
+/// Remove unit productions?
 /// Generate LL(1) table

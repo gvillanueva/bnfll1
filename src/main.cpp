@@ -1,3 +1,4 @@
+#ifndef TEST
 #include <fstream>
 #include "bnflex.h"
 #include "bnfsyn.h"
@@ -32,4 +33,37 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+#else
+#include "bnfrule.h"
+int main(int, char*[])
+{
+    BnfRule rule;
+    rule.setName("S");
 
+    BnfExpression expression1;
+    expression1.push_back(Token("if", "TERM"));
+    expression1.push_back(Token("E", "NONTERM"));
+    expression1.push_back(Token("then", "if"));
+    expression1.push_back(Token("S", "NONTERM"));
+
+    BnfExpression expression2;
+    expression2.push_back(Token("if", "TERM"));
+    expression2.push_back(Token("E", "NONTERM"));
+    expression2.push_back(Token("then", "TERM"));
+    expression2.push_back(Token("S", "NONTERM"));
+    expression2.push_back(Token("else", "TERM"));
+    expression2.push_back(Token("S", "NONTERM"));
+
+    BnfExpression expression3;
+    expression3.push_back(Token("a", "TERM"));
+
+    rule.addExpression(expression1);
+    rule.addExpression(expression3);
+    rule.addExpression(expression2);
+
+    BnfGrammar grammar;
+    grammar.addRule(rule);
+    BnfGrammar leftFactored = grammar.leftFactor();
+}
+
+#endif
