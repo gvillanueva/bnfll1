@@ -35,6 +35,16 @@ Token::Token(const Token& copy)
 {
 }
 
+Token& Token::operator=(const Token& copy)
+{
+    m_Lexeme = copy.m_Lexeme;
+    m_Type = copy.m_Type;
+    m_Source = copy.m_Source;
+    m_Line = copy.m_Line;
+    m_Column = copy.m_Column;
+    return *this;
+}
+
 /*!
  * \brief Gets the specific instance of the generic token type.
  * \return String representing the token's characters.

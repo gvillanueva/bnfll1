@@ -23,20 +23,21 @@ class BnfLiteral : BnfTerm {};
 class BnfNonTerminal : BnfTerm {};
 
 typedef std::vector<BnfTerm> BnfExpression;
-typedef std::list<BnfExpression> BnfExpressionList;
+typedef std::vector<BnfExpression> BnfExpressionList;
+typedef std::pair<BnfExpression, BnfExpression::iterator> BnfLeftFactorPair;
 
 class BnfRule
 {
 public:
     BnfRule();
-    std::list<BnfExpression> expressions() const { return m_Expressions; }
+    BnfExpressionList expressions() const { return m_Expressions; }
     void addExpression(BnfExpression expression) { m_Expressions.push_back(expression); }
     void setName(const std::string value) { m_RuleName = value; }
     std::list<BnfRule> leftFactor();
 
 private:
     std::string m_RuleName; // or BnfNonTerminal?
-    std::list<BnfExpression> m_Expressions;
+    BnfExpressionList m_Expressions;
 };
 
 class BnfGrammar

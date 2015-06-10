@@ -26,6 +26,8 @@ public:
     /// Instantiates a Token object using deep-copies of another Token's values.
     Token(const Token& copy);
 
+    Token& operator=(const Token& copy);
+
     /// Gets the specific instance of the generic token type.
     std::string lexeme() const;
 

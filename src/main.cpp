@@ -43,7 +43,7 @@ int main(int, char*[])
     BnfExpression expression1;
     expression1.push_back(Token("if", "TERM"));
     expression1.push_back(Token("E", "NONTERM"));
-    expression1.push_back(Token("then", "if"));
+    expression1.push_back(Token("then", "TERM"));
     expression1.push_back(Token("S", "NONTERM"));
 
     BnfExpression expression2;
@@ -57,9 +57,18 @@ int main(int, char*[])
     BnfExpression expression3;
     expression3.push_back(Token("a", "TERM"));
 
-    rule.addExpression(expression1);
-    rule.addExpression(expression3);
+    BnfExpression expression4;
+    expression4.push_back(Token("if", "TERM"));
+    expression4.push_back(Token("E", "NONTERM"));
+    expression4.push_back(Token("then", "TERM"));
+    expression4.push_back(Token("S", "NONTERM"));
+    expression4.push_back(Token("else", "TERM"));
+    expression4.push_back(Token("Q", "NONTERM"));
+
+    rule.addExpression(expression4);
     rule.addExpression(expression2);
+    rule.addExpression(expression3);
+    rule.addExpression(expression1);
 
     BnfGrammar grammar;
     grammar.addRule(rule);
