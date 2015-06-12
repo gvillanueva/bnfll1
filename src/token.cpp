@@ -35,13 +35,21 @@ Token::Token(const Token& copy)
 {
 }
 
+/*!
+ * \brief Copies the values of one Token object to another.
+ * \param copy The object to copy.
+ * \return Reference to the Token object that copied the values.
+ */
 Token& Token::operator=(const Token& copy)
 {
-    m_Lexeme = copy.m_Lexeme;
-    m_Type = copy.m_Type;
-    m_Source = copy.m_Source;
-    m_Line = copy.m_Line;
-    m_Column = copy.m_Column;
+    if (this != &copy)
+    {
+        m_Lexeme = copy.m_Lexeme;
+        m_Type = copy.m_Type;
+        m_Source = copy.m_Source;
+        m_Line = copy.m_Line;
+        m_Column = copy.m_Column;
+    }
     return *this;
 }
 
