@@ -59,10 +59,7 @@ std::list<BnfRule> BnfRule::leftFactor()
         if (leftFactorableExprs.size() > 1)
         {
             // Produce left factored expression
-            BnfExpression leftFactored;
-            std::copy(leftFactorableExprs.begin()->first.begin(),
-                      leftFactorableExprs.begin()->second,
-                      std::back_inserter(leftFactored));
+            BnfExpression leftFactored(exprsIter->begin(), leftFactorableExprs.begin()->second);
             leftFactored.push_back(Token(m_RuleName+nameSfx, "NONTERM"));
 
             // Produce new grammar rule
@@ -74,10 +71,7 @@ std::list<BnfRule> BnfRule::leftFactor()
             for (std::list<BnfLeftFactorPair>::iterator iter = leftFactorableExprs.begin();
                  iter != leftFactorableExprs.end(); iter++)
             {
-                if (iter->second == iter->first.end())
-                    iter->first.clear();
-                else
-                    iter->first.erase(iter->first.begin(), iter->second);
+                iter->first.erase(iter->first.begin(), iter->second);
                 newRule.addExpression(iter->first);
             }
 

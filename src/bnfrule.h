@@ -10,7 +10,7 @@ class BnfTerm {
 public:
     BnfTerm(Token token) : token(token){}
     BnfTerm(const BnfTerm& copy) : token(copy.token) {}
-    BnfTerm& operator=(const BnfTerm& copy) { token = copy.token; return *this; }
+    BnfTerm& operator=(const BnfTerm& copy) { if (this != &copy) token = copy.token; return *this; }
     bool operator!=(const BnfTerm& a) const { return token.lexeme() != a.token.lexeme(); }
     bool operator==(const BnfTerm& a) const { return token.lexeme() == a.token.lexeme(); }
     Token token;
@@ -24,7 +24,7 @@ class BnfNonTerminal : BnfTerm {};
 
 typedef std::vector<BnfTerm> BnfExpression;
 typedef std::vector<BnfExpression> BnfExpressionList;
-typedef std::pair<BnfExpression, BnfExpression::iterator> BnfLeftFactorPair;
+typedef std::pair<BnfExpression&, BnfExpression::iterator> BnfLeftFactorPair;
 
 class BnfRule
 {
