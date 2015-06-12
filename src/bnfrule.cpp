@@ -8,17 +8,26 @@ bool compare_expressions(const BnfExpression a, const BnfExpression b)
     return a > b;
 }
 
-BnfGrammar BnfGrammar::leftFactor()
+BnfRule::BnfRule()
 {
-    // For each rule
-    for (std::list<BnfRule>::iterator rule = m_Rules.begin();
-         rule != m_Rules.end(); rule++)
-    {
-        (*rule).leftFactor();
-    }
 }
 
-std::list<BnfRule> BnfRule::leftFactor()
+BnfExpressionList BnfRule::expressions() const
+{
+    return m_Expressions;
+}
+
+void BnfRule::addExpression(BnfExpression expression)
+{
+    m_Expressions.push_back(expression);
+}
+
+void BnfRule::setName(const std::string value)
+{
+    m_RuleName = value;
+}
+
+void BnfRule::leftFactor()
 {
     // Sort expressions so that we don't have to worry that we didn't start with
     // the shortest common left factor
@@ -45,7 +54,6 @@ std::list<BnfRule> BnfRule::leftFactor()
             // The two expressions can be left factored
             if (pair.second != otherExprs->begin()) {
                 // Add the expression being evaluated
-                bool allFirstTokensUsed = pair.first == exprsIter->end();
                 if (leftFactorableExprs.size() == 0)
                     leftFactorableExprs.push_back(BnfLeftFactorPair(*exprsIter, pair.first));
                 leftFactorableExprs.push_back(BnfLeftFactorPair(*otherExprs, pair.second));
@@ -84,6 +92,14 @@ std::list<BnfRule> BnfRule::leftFactor()
     }
 }
 
-BnfRule::BnfRule()
+
+
+void BnfGrammar::leftFactor()
 {
+    // For each rule
+    for (std::list<BnfRule>::iterator rule = m_Rules.begin();
+         rule != m_Rules.end(); rule++)
+    {
+        (*rule).leftFactor();
+    }
 }

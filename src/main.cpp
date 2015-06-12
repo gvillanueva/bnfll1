@@ -74,7 +74,7 @@ int main(int, char*[])
 
     BnfGrammar grammar;
     grammar.addRule(rule);
-    BnfGrammar leftFactored = grammar.leftFactor();
+    grammar.leftFactor();
 }
 
 #endif

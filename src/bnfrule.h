@@ -15,10 +15,10 @@ class BnfRule
 {
 public:
     BnfRule();
-    BnfExpressionList expressions() const { return m_Expressions; }
-    void addExpression(BnfExpression expression) { m_Expressions.push_back(expression); }
-    void setName(const std::string value) { m_RuleName = value; }
-    std::list<BnfRule> leftFactor();
+    BnfExpressionList expressions() const;
+    void addExpression(BnfExpression expression);
+    void setName(const std::string value);
+    void leftFactor();
 
 private:
     std::string m_RuleName; // or BnfNonTerminal?
@@ -29,7 +29,7 @@ class BnfGrammar
 {
 public:
     /// Returns a left-factored equivalent of the current BnfGrammar;
-    BnfGrammar leftFactor();
+    void leftFactor();
     void addRule(BnfRule rule) { m_Rules.push_back(rule); }
 
 private:
