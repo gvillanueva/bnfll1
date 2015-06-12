@@ -1,7 +1,7 @@
 #include "bnfrule.h"
 #include "bnfterm.h"
-#include <map>
 #include <algorithm>
+#include <QDebug>
 
 bool compare_expressions(const BnfExpression a, const BnfExpression b)
 {
@@ -10,11 +10,18 @@ bool compare_expressions(const BnfExpression a, const BnfExpression b)
 
 BnfRule::BnfRule()
 {
+    qDebug() << __func__ << m_RuleName.c_str();
 }
 
-BnfExpressionList BnfRule::expressions() const
+BnfRule::BnfRule(const BnfRule& copy)
+    :m_RuleName(copy.m_RuleName), m_Expressions(copy.m_Expressions)
 {
-    return m_Expressions;
+    qDebug() << __func__ << "copy" << m_RuleName.c_str();
+}
+
+BnfExpressionVector BnfRule::expressions() const
+{
+    qDebug() << __func__ << "op=" << m_RuleName.c_str();
 }
 
 void BnfRule::addExpression(BnfExpression expression)
@@ -34,18 +41,18 @@ void BnfRule::leftFactor()
     std::sort(m_Expressions.begin(), m_Expressions.end());
     std::string nameSfx = "'";
 
-    // For each expression in sorted list
-    for (BnfExpressionList::iterator exprsIter = m_Expressions.begin();
+    // For each expression in sorted vector
+    for (BnfExpressionVector::iterator exprsIter = m_Expressions.begin();
          exprsIter != m_Expressions.end(); exprsIter++)
     {
         // Hold the return value of mismatch for evaluation
         std::pair<BnfExpression::iterator, BnfExpression::iterator> pair;
 
-        // Holds the list of left factorable expressions
-        std::list<BnfLeftFactorPair> leftFactorableExprs;
+        // Holds the vector of left factorable expressions
+        std::vector<BnfLeftFactorPair> leftFactorableExprs;
 
-        // Start mismatching on next expression in the list
-        for (BnfExpressionList::iterator otherExprs = exprsIter + 1;
+        // Start mismatching on next expression in the vector
+        for (BnfExpressionVector::iterator otherExprs = exprsIter + 1;
              otherExprs != m_Expressions.end(); otherExprs++)
         {
             pair = std::mismatch(exprsIter->begin(), exprsIter->end(), otherExprs->begin());
@@ -55,11 +62,11 @@ void BnfRule::leftFactor()
             if (pair.second != otherExprs->begin()) {
                 // Add the expression being evaluated
                 if (leftFactorableExprs.size() == 0)
-                    leftFactorableExprs.push_back(BnfLeftFactorPair(*exprsIter, pair.first));
-                leftFactorableExprs.push_back(BnfLeftFactorPair(*otherExprs, pair.second));
+                    leftFactorableExprs.push_back(BnfLeftFactorPair(exprsIter, pair.first));
+                leftFactorableExprs.push_back(BnfLeftFactorPair(otherExprs, pair.second));
             }
-            // Since the expressions list is sorted, we know we can break on the
-            // first expression without a common left factor
+            // Since the expressions vector is sorted, we know we can break on
+            // the first expression without a common left factor
             else
                 break;
         }
@@ -75,15 +82,13 @@ void BnfRule::leftFactor()
             BnfRule newRule;
             newRule.setName(m_RuleName+nameSfx);
 
-            // iter == std::pair<BnfExpression, BnfExpression::iterator>
-            //
-            for (std::list<BnfLeftFactorPair>::iterator iter = leftFactorableExprs.begin();
-                 iter != leftFactorableExprs.end(); iter++)
+            for (std::vector<BnfLeftFactorPair>::iterator iter = leftFactorableExprs.begin();
+                 iter != leftFactorableExprs.end();)
             {
-                iter->first.erase(iter->first.begin(), iter->second);
-                if (iter->first.size() != 0)
-                    newRule.addExpression(iter->first);
-                //m_Expressions.erase(iter->first);
+                iter->first->erase(iter->first->begin(), iter->second);
+                if (iter->first->size() != 0)
+                    newRule.addExpression(*iter->first);
+                m_Expressions.erase(iter++->first);
             }
 
             // Add additional "'" to suffix for next left factor
@@ -97,9 +102,14 @@ void BnfRule::leftFactor()
 void BnfGrammar::leftFactor()
 {
     // For each rule
-    for (std::list<BnfRule>::iterator rule = m_Rules.begin();
+    for (std::vector<BnfRule>::iterator rule = m_Rules.begin();
          rule != m_Rules.end(); rule++)
     {
         (*rule).leftFactor();
     }
+}
+
+void BnfGrammar::addRule(BnfRule rule)
+{
+    m_Rules.push_back(rule);
 }
