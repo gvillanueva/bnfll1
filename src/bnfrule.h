@@ -1,26 +1,11 @@
 #ifndef BNFRULE_H
 #define BNFRULE_H
 
-#include "token.h"
 #include <string>
 #include <list>
 #include <vector>
 
-class BnfTerm {
-public:
-    BnfTerm(Token token) : token(token){}
-    BnfTerm(const BnfTerm& copy) : token(copy.token) {}
-    BnfTerm& operator=(const BnfTerm& copy) { if (this != &copy) token = copy.token; return *this; }
-    bool operator!=(const BnfTerm& a) const { return token.lexeme() != a.token.lexeme(); }
-    bool operator==(const BnfTerm& a) const { return token.lexeme() == a.token.lexeme(); }
-    Token token;
-    bool operator<(const BnfTerm& a) const
-    {
-        return this->token.type() < a.token.type();
-    }
-};
-class BnfLiteral : BnfTerm {};
-class BnfNonTerminal : BnfTerm {};
+class BnfTerm;
 
 typedef std::vector<BnfTerm> BnfExpression;
 typedef std::vector<BnfExpression> BnfExpressionList;

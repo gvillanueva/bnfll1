@@ -35,6 +35,8 @@ int main(int argc, char *argv[])
 }
 #else
 #include "bnfrule.h"
+#include "bnfterm.h"
+
 int main(int, char*[])
 {
     BnfRule rule;

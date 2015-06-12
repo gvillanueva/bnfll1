@@ -1,4 +1,5 @@
 #include "bnfrule.h"
+#include "bnfterm.h"
 #include <map>
 #include <algorithm>
 
@@ -72,7 +73,9 @@ std::list<BnfRule> BnfRule::leftFactor()
                  iter != leftFactorableExprs.end(); iter++)
             {
                 iter->first.erase(iter->first.begin(), iter->second);
-                newRule.addExpression(iter->first);
+                if (iter->first.size() != 0)
+                    newRule.addExpression(iter->first);
+                //m_Expressions.erase(iter->first);
             }
 
             // Add additional "'" to suffix for next left factor
