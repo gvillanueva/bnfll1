@@ -1,3 +1,13 @@
+/*!
+ * \author      Giancarlo Villanueva
+ * \date        Created,  6/11/2015
+ *              Modified, 6/11/2015
+ * \ingroup     bnfll1
+ * \file        bnfterm.cpp
+ *
+ * \brief       Defines the implementation of the class for Backus-Naur Form
+ *              expression terms.
+ */
 #include "bnfterm.h"
 
 BnfTerm::BnfTerm(Token token)

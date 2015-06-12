@@ -1,3 +1,13 @@
+/*!
+ * \author      Giancarlo Villanueva
+ * \date        Created,  6/11/2015
+ *              Modified, 6/11/2015
+ * \ingroup     bnfll1
+ * \file        bnfterm.h
+ *
+ * \brief       Declares the structure of the class for Backus-Naur Form
+ *              expression terms.
+ */
 #ifndef BNFTERM_H
 #define BNFTERM_H
 
