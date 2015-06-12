@@ -12,13 +12,15 @@ typedef std::pair<BnfExpressionVector::iterator, BnfExpression::iterator> BnfLef
 
 class BnfRule
 {
+    friend class BnfGrammar;
 public:
     BnfRule();
     BnfRule(const BnfRule& copy);
     BnfExpressionVector expressions() const;
     void addExpression(BnfExpression expression);
-    void setName(const std::string value);
-    void leftFactor();
+    std::string ruleName() const;
+    void setRuleName(const std::string value);
+    std::vector<BnfRule>* leftFactor();
 
 private:
     std::string m_RuleName;
@@ -31,6 +33,7 @@ public:
     /// Returns a left-factored equivalent of the current BnfGrammar;
     void leftFactor();
     void addRule(BnfRule rule);
+    void print();
 
 private:
     std::vector<BnfRule> m_Rules;

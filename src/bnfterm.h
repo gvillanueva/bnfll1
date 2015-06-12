@@ -16,6 +16,7 @@
 
 class BnfTerm
 {
+    friend class BnfGrammar;
 public:
     BnfTerm(Token token);
     BnfTerm(const BnfTerm& copy);

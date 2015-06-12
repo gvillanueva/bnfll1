@@ -40,7 +40,10 @@ int main(int argc, char *argv[])
 int main(int, char*[])
 {
     BnfRule rule;
-    rule.setName("S");
+    rule.setRuleName("S");
+
+    BnfRule rule2;
+    rule2.setRuleName("E");
 
     BnfExpression expression1;
     expression1.push_back(Token("if", "TERM"));
@@ -67,14 +70,23 @@ int main(int, char*[])
     expression4.push_back(Token("else", "TERM"));
     expression4.push_back(Token("Q", "NONTERM"));
 
+    BnfExpression expression5;
+    expression5.push_back(Token("a", "TERM"));
+    expression5.push_back(Token("b", "TERM"));
+
     rule.addExpression(expression4);
     rule.addExpression(expression2);
-    rule.addExpression(expression3);
     rule.addExpression(expression1);
+
+    rule2.addExpression(expression3);
+    rule2.addExpression(expression5);
 
     BnfGrammar grammar;
     grammar.addRule(rule);
+    grammar.addRule(rule2);
+    grammar.print();
     grammar.leftFactor();
+    grammar.print();
 }
 
 #endif

@@ -29,71 +29,82 @@ void BnfRule::addExpression(BnfExpression expression)
     m_Expressions.push_back(expression);
 }
 
-void BnfRule::setName(const std::string value)
+std::string BnfRule::ruleName() const
+{
+    return m_RuleName;
+}
+
+void BnfRule::setRuleName(const std::string value)
 {
     m_RuleName = value;
 }
 
-void BnfRule::leftFactor()
+std::vector<BnfRule>* BnfRule::leftFactor()
 {
     // Sort expressions so that we don't have to worry that we didn't start with
     // the shortest common left factor
     std::sort(m_Expressions.begin(), m_Expressions.end());
     std::string nameSfx = "'";
+    std::vector<BnfRule>* leftFactoredRules = new std::vector<BnfRule>;
 
     // For each expression in sorted vector
     for (BnfExpressionVector::iterator exprsIter = m_Expressions.begin();
-         exprsIter != m_Expressions.end(); exprsIter++)
+         exprsIter != m_Expressions.end();)
     {
-        // Hold the return value of mismatch for evaluation
+        bool leftFactored = false;
+        BnfExpression::iterator firstLeft;
+
         std::pair<BnfExpression::iterator, BnfExpression::iterator> pair;
 
-        // Holds the vector of left factorable expressions
-        std::vector<BnfLeftFactorPair> leftFactorableExprs;
+        // Produce new grammar rule
+        BnfRule newRule;
+        newRule.setRuleName(m_RuleName+nameSfx);
 
         // Start mismatching on next expression in the vector
         for (BnfExpressionVector::iterator otherExprs = exprsIter + 1;
-             otherExprs != m_Expressions.end(); otherExprs++)
+             otherExprs != m_Expressions.end();)
         {
+            // Hold the return value of mismatch for evaluation
             pair = std::mismatch(exprsIter->begin(), exprsIter->end(), otherExprs->begin());
 
             // If the second expressions's mismatched term is not its first term
             // The two expressions can be left factored
             if (pair.second != otherExprs->begin()) {
-                // Add the expression being evaluated
-                if (leftFactorableExprs.size() == 0)
-                    leftFactorableExprs.push_back(BnfLeftFactorPair(exprsIter, pair.first));
-                leftFactorableExprs.push_back(BnfLeftFactorPair(otherExprs, pair.second));
+                firstLeft = pair.first;
+                leftFactored = true;
+
+                // If left factored, remove from original rule
+                otherExprs->erase(otherExprs->begin(), pair.second);
+                newRule.addExpression(*otherExprs);
+                otherExprs = m_Expressions.erase(otherExprs);
             }
             // Since the expressions vector is sorted, we know we can break on
             // the first expression without a common left factor
             else
                 break;
-        }
+       }
 
-        // If we have more than one left factorable expression
-        if (leftFactorableExprs.size() > 1)
+        // If current expression was left factored, remove from original rule
+        if (leftFactored)
         {
-            // Produce left factored expression
-            BnfExpression leftFactored(exprsIter->begin(), leftFactorableExprs.begin()->second);
+            BnfExpression leftFactored(exprsIter->begin(), firstLeft);
             leftFactored.push_back(Token(m_RuleName+nameSfx, "NONTERM"));
+            m_Expressions.push_back(leftFactored);
 
-            // Produce new grammar rule
-            BnfRule newRule;
-            newRule.setName(m_RuleName+nameSfx);
-
-            for (std::vector<BnfLeftFactorPair>::iterator iter = leftFactorableExprs.begin();
-                 iter != leftFactorableExprs.end();)
-            {
-                iter->first->erase(iter->first->begin(), iter->second);
-                if (iter->first->size() != 0)
-                    newRule.addExpression(*iter->first);
-                m_Expressions.erase(iter++->first);
-            }
-
-            // Add additional "'" to suffix for next left factor
+            leftFactoredRules->push_back(newRule);
             nameSfx += "'";
+            exprsIter = m_Expressions.erase(exprsIter);
         }
+        else
+            exprsIter++;
+    }
+
+    if (leftFactoredRules->size() > 0)
+        return leftFactoredRules;
+    else
+    {
+        delete leftFactoredRules;
+        return NULL;
     }
 }
 
@@ -105,11 +116,36 @@ void BnfGrammar::leftFactor()
     for (std::vector<BnfRule>::iterator rule = m_Rules.begin();
          rule != m_Rules.end(); rule++)
     {
-        (*rule).leftFactor();
+        std::vector<BnfRule>* leftFactoredRules = rule->leftFactor();
+        if (leftFactoredRules)
+        {
+            for (int i = 0; i < leftFactoredRules->size(); i++)
+                rule = m_Rules.insert(rule+1, leftFactoredRules->at(i));
+        }
     }
 }
 
 void BnfGrammar::addRule(BnfRule rule)
 {
     m_Rules.push_back(rule);
+}
+
+void BnfGrammar::print()
+{
+    for (std::vector<BnfRule>::iterator rule = m_Rules.begin();
+         rule != m_Rules.end(); rule++)
+    {
+        QDebug debugLine = qDebug();
+        debugLine << rule->ruleName().c_str() << "->";
+
+        for (std::vector<BnfExpression>::iterator expr = rule->m_Expressions.begin();
+             expr != rule->m_Expressions.end(); expr++) {
+            for (std::vector<BnfTerm>::iterator term = expr->begin();
+                 term != expr->end(); term++){
+                debugLine << term->m_Token.c_str();
+            }
+            if (expr+1 != rule->m_Expressions.end())
+                debugLine << "|";
+        }
+    }
 }
