@@ -9,24 +9,34 @@ bool compare_expressions(const BnfExpression a, const BnfExpression b)
 }
 
 BnfRule::BnfRule()
+    :m_HasLambda(false)
 {
     qDebug() << __func__ << m_RuleName.c_str();
 }
 
 BnfRule::BnfRule(const BnfRule& copy)
-    :m_RuleName(copy.m_RuleName), m_Expressions(copy.m_Expressions)
+    :m_RuleName(copy.m_RuleName), m_Expressions(copy.m_Expressions),
+     m_HasLambda(copy.m_HasLambda)
 {
     qDebug() << __func__ << "copy" << m_RuleName.c_str();
 }
 
 BnfExpressionVector BnfRule::expressions() const
 {
-    qDebug() << __func__ << "op=" << m_RuleName.c_str();
+    return m_Expressions;
 }
 
 void BnfRule::addExpression(BnfExpression expression)
 {
-    m_Expressions.push_back(expression);
+    if (expression.size())
+        m_Expressions.push_back(expression);
+    else if (!m_HasLambda)
+    {
+        BnfExpression lambdaExpr;
+        lambdaExpr.push_back(Token("λ", "TERM"));
+        m_Expressions.push_back(lambdaExpr);
+        m_HasLambda = true;
+    }
 }
 
 std::string BnfRule::ruleName() const
@@ -91,7 +101,11 @@ std::vector<BnfRule>* BnfRule::leftFactor()
             leftFactored.push_back(Token(m_RuleName+nameSfx, "NONTERM"));
             m_Expressions.push_back(leftFactored);
 
+            // Add right factors to new rule
+            exprsIter->erase(exprsIter->begin(), firstLeft);
+            newRule.addExpression(*exprsIter);
             leftFactoredRules->push_back(newRule);
+
             nameSfx += "'";
             exprsIter = m_Expressions.erase(exprsIter);
         }

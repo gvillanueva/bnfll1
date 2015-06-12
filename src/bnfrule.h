@@ -25,6 +25,7 @@ public:
 private:
     std::string m_RuleName;
     BnfExpressionVector m_Expressions;
+    bool m_HasLambda;
 };
 
 class BnfGrammar
