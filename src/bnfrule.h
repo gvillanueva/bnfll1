@@ -6,8 +6,8 @@
 
 class BnfTerm;
 
-typedef std::vector<BnfTerm> BnfExpression;
-typedef std::vector<BnfExpression> BnfExpressionVector;
+typedef std::vector<BnfTerm*> BnfExpression;
+typedef std::vector<BnfExpression*> BnfExpressionVector;
 typedef std::pair<BnfExpressionVector::iterator, BnfExpression::iterator> BnfLeftFactorPair;
 
 class BnfRule
@@ -16,28 +16,16 @@ class BnfRule
 public:
     BnfRule();
     BnfRule(const BnfRule& copy);
-    BnfExpressionVector expressions() const;
-    void addExpression(BnfExpression expression);
+    BnfExpressionVector* expressions() const;
+    void addExpression(BnfExpression* expression);
     std::string ruleName() const;
     void setRuleName(const std::string value);
-    std::vector<BnfRule>* leftFactor();
+    std::vector<BnfRule*>* leftFactor();
 
 private:
     std::string m_RuleName;
-    BnfExpressionVector m_Expressions;
+    BnfExpressionVector* m_Expressions;
     bool m_HasLambda;
-};
-
-class BnfGrammar
-{
-public:
-    /// Returns a left-factored equivalent of the current BnfGrammar;
-    void leftFactor();
-    void addRule(BnfRule rule);
-    void print();
-
-private:
-    std::vector<BnfRule> m_Rules;
 };
 
 #endif // BNFRULE_H

@@ -12,8 +12,9 @@
 #define BNFSYN_H
 
 #include "token.h"
+#include "bnfgrammar.h"
 #include <list>
-typedef std::list<Token> TokenList;
+typedef std::vector<Token> TokenList;
 
 /*!
  * \brief The BnfSyn class is absolutely not thread-safe.
@@ -22,7 +23,7 @@ class BnfSyn
 {
 public:
     BnfSyn();
-    bool analyze(const TokenList& tokens);
+    BnfGrammar* analyze(const TokenList& tokens);
 
 private:
     bool readType(std::string lexeme);
@@ -34,8 +35,11 @@ private:
     bool term();
     bool literal();
 
-    std::list<Token>::const_iterator m_Iter;
-    std::list<Token>::const_iterator m_IterEnd;
+    TokenList::const_iterator m_Iter;
+    TokenList::const_iterator m_IterEnd;
+    BnfGrammar* m_Grammar;
+    BnfRule* m_CurrentRule;
+    BnfExpression* m_CurrentExpression;
 };
 
 #endif // BNFSYN_H

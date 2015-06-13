@@ -2,6 +2,7 @@
 #include <fstream>
 #include "bnflex.h"
 #include "bnfsyn.h"
+#include "bnfgrammar.h"
 
 //Input:  Path to a file
 //Output: An LL(1) table that could be used by a parser.
@@ -25,8 +26,15 @@ int main(int argc, char *argv[])
     if (tokens->size() <= 0)
         return -2;
     else {
-        if (syn.analyze(*tokens))
+        BnfGrammar *grammar = syn.analyze(*tokens);
+        grammar->connectNonTerminals();
+
+        if (grammar) {
             std::cout << "Pass" << std::endl;
+            grammar->print();
+            grammar->leftFactor();
+            grammar->print();
+        }
         else
             std::cout << "Fail" << std::endl;
     }
@@ -34,6 +42,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 #else
+#include "bnfgrammar.h"
 #include "bnfrule.h"
 #include "bnfterm.h"
 

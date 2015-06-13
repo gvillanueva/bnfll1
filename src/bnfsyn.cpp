@@ -8,17 +8,24 @@
  * \brief       Defines the methods of the Backus-Naur Form syntax analyzer
  *              class.
  */
+#include "bnfterm.h"
 #include "bnfsyn.h"
 
-BnfSyn::BnfSyn()//const TokenList& tokens)
+BnfSyn::BnfSyn()
+    :m_Grammar(0), m_CurrentRule(0), m_CurrentExpression(0)
 {
 }
 
-bool BnfSyn::analyze(const TokenList& tokens)
+BnfGrammar* BnfSyn::analyze(const TokenList& tokens)
 {
     m_Iter = tokens.begin();
     m_IterEnd = tokens.end();
-    return syntax();
+    m_Grammar = new BnfGrammar;
+
+    if (syntax())
+        return m_Grammar;// return grammar
+
+    return NULL;
 }
 
 bool BnfSyn::readType(std::string type)
@@ -26,7 +33,7 @@ bool BnfSyn::readType(std::string type)
     if (m_Iter == m_IterEnd)
         return false;
 
-    if ((*m_Iter).type() == type) {
+    if (m_Iter->type() == type) {
         m_Iter++;
         return true;
     }
@@ -47,18 +54,33 @@ bool BnfSyn::syntax()
 bool BnfSyn::rule()
 {
     if (readType("NONTERM"))
+    {
+        m_CurrentRule = new BnfRule;
+        m_CurrentRule->setRuleName((m_Iter-1)->lexeme());
+        if (m_Grammar->containsRuleName(m_CurrentRule->ruleName())) {
+            delete m_CurrentRule;
+            m_CurrentRule = 0;
+            return false;
+        }
+
         if (readType("::="))
             if (expression())
-                if (readType(";"))
+                if (readType(";")) {
+                    m_Grammar->addRule(m_CurrentRule);
                     return true;
+                }
+    }
 
     return false;
 }
 
 bool BnfSyn::expression()
 {
+    m_CurrentExpression = new BnfExpression;
+
     if (list()) {
         if (readType("|")) {
+            m_CurrentRule->addExpression(m_CurrentExpression);
             if (expression()) {
                 return true;
             }
@@ -67,6 +89,7 @@ bool BnfSyn::expression()
             return false;
         }
 
+        m_CurrentRule->addExpression(m_CurrentExpression);
         // End of list of terms
         return true;
     }
@@ -77,7 +100,21 @@ bool BnfSyn::expression()
 bool BnfSyn::list()
 {
     if (term()) {
-        while (term());
+        Token lastToken = *(m_Iter-1);
+        if (lastToken.type() == "NONTERM")
+            m_CurrentExpression->push_back(new BnfNonTerminal(lastToken,
+                                m_Grammar->findRuleByName(lastToken.lexeme())));
+        else
+            m_CurrentExpression->push_back(new BnfTerm(lastToken));
+
+        while (term()) {
+            Token lastToken = *(m_Iter-1);
+            if (lastToken.type() == "NONTERM")
+                m_CurrentExpression->push_back(new BnfNonTerminal(lastToken,
+                                    m_Grammar->findRuleByName(lastToken.lexeme())));
+            else
+                m_CurrentExpression->push_back(new BnfTerm(lastToken));
+        }
         return true;
     }
 

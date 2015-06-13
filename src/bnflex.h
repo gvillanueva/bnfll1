@@ -15,7 +15,7 @@
 #include <list>
 #include <iostream>
 
-typedef std::list<Token> TokenList;
+typedef std::vector<Token> TokenList;
 
 class BnfLex
 {

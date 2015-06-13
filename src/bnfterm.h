@@ -25,20 +25,23 @@ public:
     bool operator==(const BnfTerm& a) const;
     bool operator<(const BnfTerm& a) const;
     std::string token() const;
+    virtual bool isTerm() const;
 
 private:
     std::string m_Token;
 };
 
-class BnfNonTerminal : BnfTerm
+class BnfNonTerminal : public BnfTerm
 {
 public:
-    BnfNonTerminal(Token token, BnfRule& rule);
-    const BnfRule& rule() const;
-    void setRule(const BnfRule& value);
+    BnfNonTerminal(Token token, BnfRule* rule);
+    BnfNonTerminal(const BnfNonTerminal& copy);
+    BnfRule* rule() const;
+    void setRule(BnfRule* value);
+    virtual bool isTerm() const;
 
 private:
-    BnfRule& m_Rule;
+    BnfRule* m_Rule;
 };
 
 #endif // BNFTERM_H

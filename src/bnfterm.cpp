@@ -51,19 +51,35 @@ std::string BnfTerm::token() const
     return m_Token;
 }
 
-
-
-BnfNonTerminal::BnfNonTerminal(Token token, BnfRule& rule)
-    :BnfTerm(token), m_Rule(rule)
+bool BnfTerm::isTerm() const
 {
+    return true;
 }
 
-const BnfRule& BnfNonTerminal::rule() const
+
+BnfNonTerminal::BnfNonTerminal(Token token, BnfRule* rule)
+    :BnfTerm(token), m_Rule(rule)
+{
+    qDebug() << __func__ << token.lexeme().c_str();
+}
+
+BnfNonTerminal::BnfNonTerminal(const BnfNonTerminal& copy)
+    :BnfTerm(copy), m_Rule(copy.m_Rule)
+{
+    qDebug() << __func__ << "copy" << token().c_str();
+}
+
+BnfRule* BnfNonTerminal::rule() const
 {
     return m_Rule;
 }
 
-void BnfNonTerminal::setRule(const BnfRule& value)
+void BnfNonTerminal::setRule(BnfRule* value)
 {
     m_Rule = value;
+}
+
+bool BnfNonTerminal::isTerm() const
+{
+    return false;
 }
