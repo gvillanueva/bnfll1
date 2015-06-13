@@ -12,6 +12,7 @@ public:
     bool containsRuleName(std::string ruleName);
     BnfRule* findRuleByName(std::string ruleName);
     void connectNonTerminals();
+    std::vector<BnfRule*> rules() const;
     void print();
 
 private:
