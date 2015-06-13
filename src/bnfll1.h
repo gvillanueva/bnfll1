@@ -12,8 +12,8 @@ class BnfLl1
 {
 public:
     BnfLl1();
-    std::vector<std::set<BnfRule*, BnfTerm>*> first(BnfGrammar* grammar);
-    std::set<BnfRule*, BnfTerm>* first(BnfRule* rule);
+    std::vector<std::pair<BnfRule*, std::set<BnfTerm*> > > first(BnfGrammar* grammar);
+    std::set<BnfTerm*> first(BnfRule* rule);
 };
 
 #endif // BNFLL1_H

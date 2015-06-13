@@ -3,6 +3,7 @@
 #include "bnflex.h"
 #include "bnfsyn.h"
 #include "bnfgrammar.h"
+#include "bnfll1.h"
 
 //Input:  Path to a file
 //Output: An LL(1) table that could be used by a parser.
@@ -12,6 +13,7 @@ int main(int argc, char *argv[])
 {
     BnfLex lex;
     BnfSyn syn;
+    BnfLl1 ll1;
     char *filename = NULL;
 
     // Ensure filename is defined
@@ -34,6 +36,8 @@ int main(int argc, char *argv[])
             grammar->print();
             grammar->leftFactor();
             grammar->print();
+
+            std::vector<std::pair<BnfRule*, std::set<BnfTerm*> > > firsts = ll1.first(grammar);
         }
         else
             std::cout << "Fail" << std::endl;
