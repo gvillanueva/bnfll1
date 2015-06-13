@@ -78,7 +78,7 @@ void BnfGrammar::connectNonTerminals()
 
 std::vector<BnfRule*> BnfGrammar::rules() const
 {
-    return m_Rules();
+    return m_Rules;
 }
 
 void BnfGrammar::print()
