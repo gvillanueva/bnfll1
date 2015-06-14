@@ -1,0 +1,72 @@
+<Program>               ::=     <Definition> <Program> | λ ;
+
+<Definition>            ::=     "int" <DefinitionN> |
+                                <Identifier> <Parameter_list> <Function_body> ;
+<DefinitionN>           ::=     <Identifier> <DefinitionNN> ;
+<DefinitionNN>          ::=     "(" <DefintionNNN> ")" <DefinitionNNNN> <Function_body> |
+                                <DefinitionNNNNN> ";" ;
+<DefinitionNNN>         ::=     <Identifier_list> | λ ;
+<DefinitionNNNN>        ::=     <Parameter_declaration> <DefinitionNNNN> | λ ;
+<DefinitionNNNNN>       ::=     "," <Identifier> <DefinitionNNNNN> | λ ;
+
+<Data_definition>       ::=     "int" <Identifier> <Data_definitionN> ";" ;
+<Data_definitionN>      ::=     "," <Identifier> <Data_definitionN> | λ ;
+
+<Parameter_list>        ::=	"(" <Parameter_listN> ")" <Parameter_listNN> ;
+<Parameter_listN>       ::=     <Identifier_list> | λ ;
+<Parameter_listNN>      ::=     <Parameter_declaration> <Parameter_listNN> ;
+
+<Identifier_list>		::=	<Identifier> <Identifier_listN> ;
+<Identifier_listN>        ::=     "," <Identifier> <Identifier_listN> | λ ;
+
+<Parameter_declaration>	 ::=	"int" <Identifier> <Parameter_declarationN> ";" ;
+<Parameter_declarationN> ::=     "," <Identifier> <Parameter_declarationN> | λ ;
+
+<Function_body>         ::=     "{" <Function_bodyN> <Function_bodyNN> "}" ;
+<Function_bodyN>        ::=     <Data_defintion> <Function_bodyN> | λ ;
+<Function_bodyNN>       ::=     <Statement> <Function_bodyNN> | λ ;
+
+<Statement>             ::=     "{" <StatementNN> <StatementNNN> "}" |
+                                "if" "(" <Expression> ")" <Statement> <StatementNNNN> |
+                                "while" "(" <Expression> ")" <Statement> |
+                                "break" ";" |
+                                "continue" ";" |
+                                "return" <StatementN> ";" |
+                                <StatementN> ";" |
+                                Identifier "=" "input" "(" ")" ";" |
+                                "output" "(" <Expression> ")" ";" ;
+<StatementN>            ::=     <Expression> | λ ;
+<StatementNN>           ::=     <Data_defintion> <StatementNN> | λ ;
+<StatementNNN>          ::=     <Statement> <StatementNNN> | λ ;
+<StatementNNNN>         ::=     "else" <Statement> | λ ;
+
+<Expression>		::=	<Identifier> |
+                                <Identifier> <ExpressionN> |
+                                "++" <Identifier> |
+                                "--" <Identifier> |
+                                "!" <Identifier> |
+                                <Constant> |
+                                "(" <Expression> ")" ;
+<ExpressionN>           ::=     "=" <Expression> |
+                                "=" "input" "(" ")" |
+                                "+=" <Expression> |
+                                "-=" <Expression> |
+                                "*=" <Expression> |
+                                "/=" <Expression> |
+                                "%=" <Expression> |
+                                "==" <Expression> |
+                                "!=" <Expression> |
+                                 "<" <Expression> |
+                                "<=" <Expression> |
+                                 ">" <Expression> |
+                                ">=" <Expression> |
+                                 "+" <Expression> |
+                                 "-" <Expression> |
+                                 "*" <Expression> |
+                                 "/" <Expression> |
+                                 "%" <Expression> |
+                                 "(" <ExpressionNN> ")" ;
+<ExpressionNN>          ::=     <Argument_list> | λ ;
+
+<Argument_list>         ::=     <Expression> <Argument_listN> ;
+<Argument_listN>        ::=    "," <Expression> <Argument_listN> | λ ;
