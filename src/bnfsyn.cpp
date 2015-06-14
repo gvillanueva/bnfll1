@@ -100,20 +100,10 @@ bool BnfSyn::expression()
 bool BnfSyn::list()
 {
     if (term()) {
-        Token lastToken = *(m_Iter-1);
-        if (lastToken.type() == "NONTERM")
-            m_CurrentExpression->push_back(new BnfNonTerminal(lastToken,
-                                m_Grammar->findRuleByName(lastToken.lexeme())));
-        else
-            m_CurrentExpression->push_back(new BnfTerm(lastToken));
+        addTokenToExpression(*(m_Iter-1), m_CurrentExpression);
 
         while (term()) {
-            Token lastToken = *(m_Iter-1);
-            if (lastToken.type() == "NONTERM")
-                m_CurrentExpression->push_back(new BnfNonTerminal(lastToken,
-                                    m_Grammar->findRuleByName(lastToken.lexeme())));
-            else
-                m_CurrentExpression->push_back(new BnfTerm(lastToken));
+            addTokenToExpression(*(m_Iter-1), m_CurrentExpression);
         }
         return true;
     }
@@ -126,7 +116,16 @@ bool BnfSyn::term()
     return readType("TERM") || readType("NONTERM");
 }
 
-/// Convert EBNF to BNF
-/// Remove Lambda productions?
-/// Remove unit productions?
-/// Generate LL(1) table
+void BnfSyn::addTokenToExpression(Token token, BnfExpression* expression)
+{
+    // Don't add lambda
+    // BnfRule will mark itself as nullable for empty expressions
+    if (token.lexeme() == "?")
+            return;
+
+    if (token.type() == "NONTERM")
+        expression->push_back(new BnfNonTerminal(token,
+                              m_Grammar->findRuleByName(token.lexeme())));
+    else
+        expression->push_back(new BnfTerm(token));
+}

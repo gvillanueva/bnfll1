@@ -56,6 +56,11 @@ void BnfRule::addExpression(BnfExpression* expression)
     }
 }
 
+bool BnfRule::isNullable() const
+{
+    return m_HasLambda;
+}
+
 std::string BnfRule::ruleName() const
 {
     return m_RuleName;

@@ -37,7 +37,8 @@ int main(int argc, char *argv[])
             grammar->leftFactor();
             grammar->print();
 
-            std::vector<std::pair<BnfRule*, std::set<BnfTerm*> > > firsts = ll1.first(grammar);
+            std::map<BnfRule*, std::set<std::string> > firsts = ll1.first(grammar);
+            ll1.printFirstSets();
         }
         else
             std::cout << "Fail" << std::endl;

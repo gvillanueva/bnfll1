@@ -95,10 +95,8 @@ void BnfGrammar::print()
                  term != (*expr)->end(); term++){
                 if ((*term)->isTerm())
                     debugLine << ("\"" + (*term)->m_Token + "\"").c_str();
-                else {
-                    BnfNonTerminal* nonTerm = (BnfNonTerminal*)*term;
+                else
                     debugLine << ("<" + (*term)->m_Token + ">").c_str();
-                }
             }
             if (expr+1 != (*rule)->m_Expressions->end())
                 debugLine << "|";

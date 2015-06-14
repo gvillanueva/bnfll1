@@ -34,6 +34,7 @@ private:
     bool list();
     bool term();
     bool literal();
+    void addTokenToExpression(Token token, BnfExpression* expression);
 
     TokenList::const_iterator m_Iter;
     TokenList::const_iterator m_IterEnd;

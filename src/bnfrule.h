@@ -20,6 +20,7 @@ public:
     void addExpression(BnfExpression* expression);
     std::string ruleName() const;
     void setRuleName(const std::string value);
+    bool isNullable() const;
     std::vector<BnfRule*>* leftFactor();
 
 private:

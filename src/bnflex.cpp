@@ -58,6 +58,8 @@ TokenList* BnfLex::analyze(std::istream &istream, const char *filename)
                     tokens->push_back(Token("|", "|", filename, line, col));
                 else if (ch == ';')
                     tokens->push_back(Token(";", ";", filename, line, col));
+                else if (ch == '?')
+                    tokens->push_back(Token("?", "TERM", filename, line, col));
                 else if (ch == '<')
                     state = NONTERMINAL_START;
                 else if (ch == '"')
