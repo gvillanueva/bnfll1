@@ -1,14 +1,32 @@
+/*!
+ * \author      Giancarlo Villanueva
+ * \date        Created,  6/9/2015
+ *              Modified, 6/14/2015
+ * \ingroup     bnfll1
+ * \file        bnfrule.cpp
+ *
+ * \brief       Implements the Backus-Naur Form LL(1) grammar rule class.
+ */
 #include "bnfrule.h"
 #include "bnfterm.h"
 #include <algorithm>
 #include <QDebug>
 
+/*!
+ * \brief This is a predicate to compare expressions for sorting.
+ * \param a The first expression.
+ * \param b The second expression.
+ * \return true if the first expression is short in length, or its terms would
+ *         first, alphabetically.
+ */
 bool compare_expressions(BnfExpression* a, BnfExpression* b)
 {
+    // Shortcut to return true if the size is smaller.
     if (a->size() < b->size())
         return true;
     else if (a->size() > b->size())
         return false;
+    //Otherwise sort alphabetically by term
     else
     {
         BnfExpression::iterator aIter = a->begin(), bIter = b->begin();
@@ -19,11 +37,20 @@ bool compare_expressions(BnfExpression* a, BnfExpression* b)
     }
 }
 
+/*!
+ * \brief This is a binary predicate for comparing terms.
+ * \param a The first term.
+ * \param b The second term.
+ * \return Return whether the first term's token matches the second term's token.
+ */
 bool compare_terms(BnfTerm* a, BnfTerm* b)
 {
     return a->token() == b->token();
 }
 
+/*!
+ * \brief Instantiates a BnfRule object.
+ */
 BnfRule::BnfRule()
     :m_HasLambda(false)
 {
@@ -31,6 +58,10 @@ BnfRule::BnfRule()
     qDebug() << __func__ << m_RuleName.c_str();
 }
 
+/*!
+ * \brief BnfRule::BnfRule
+ * \param copy
+ */
 BnfRule::BnfRule(const BnfRule& copy)
     :m_RuleName(copy.m_RuleName), m_Expressions(copy.m_Expressions),
      m_HasLambda(copy.m_HasLambda)
@@ -38,15 +69,25 @@ BnfRule::BnfRule(const BnfRule& copy)
     qDebug() << __func__ << "copy" << m_RuleName.c_str();
 }
 
+/*!
+ * \brief Gets the expressions within a BnfRule.
+ * \return A pointer to the rule's vector of expressions.
+ */
 BnfExpressionVector* BnfRule::expressions() const
 {
     return m_Expressions;
 }
 
+/*!
+ * \brief Adds an expression to the rule.
+ * \param expression The expression to add to the rule.
+ */
 void BnfRule::addExpression(BnfExpression* expression)
 {
+    // If the expression contains any terms, add it
     if (expression->size())
         m_Expressions->push_back(expression);
+    // If the expression has no terms, treat it like a lambda production
     else if (!m_HasLambda)
     {
         BnfExpression* lambdaExpr = new BnfExpression;
@@ -56,21 +97,37 @@ void BnfRule::addExpression(BnfExpression* expression)
     }
 }
 
-bool BnfRule::isNullable() const
-{
-    return m_HasLambda;
-}
-
+/*!
+ * \brief Gets the name of the rule.
+ * \return A std::string identifying the rule.
+ */
 std::string BnfRule::ruleName() const
 {
     return m_RuleName;
 }
 
+/*!
+ * \brief Sets the name of the rule.
+ * \param value The new name to assign the rule.
+ */
 void BnfRule::setRuleName(const std::string value)
 {
     m_RuleName = value;
 }
 
+/*!
+ * \brief Gets whether the rule is nullable.
+ * \return true if the rule contains any lambda productions, otherwise false.
+ */
+bool BnfRule::isNullable() const
+{
+    return m_HasLambda;
+}
+
+/*!
+ * \brief Returns the left factored rules of the rule.
+ * \return A list of left-factored rules, if left factors exist, otherwise null.
+ */
 std::vector<BnfRule*>* BnfRule::leftFactor()
 {
     // Sort expressions so that we don't have to worry that we didn't start with

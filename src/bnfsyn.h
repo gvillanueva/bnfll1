@@ -1,7 +1,7 @@
 /*!
  * \author      Giancarlo Villanueva
  * \date        Created,  6/1/2015
- *              Modified, 6/8/2015
+ *              Modified, 6/14/2015
  * \ingroup     bnfll1
  * \file        bnfsyn.h
  *
@@ -13,20 +13,24 @@
 
 #include "token.h"
 #include "bnfgrammar.h"
-#include <list>
+
 typedef std::vector<Token> TokenList;
 
 /*!
- * \brief The BnfSyn class is absolutely not thread-safe.
+ * \brief The syntax analyzer for the Backus-Naur Form parser.
+ * The BnfSyn class is absolutely not thread-safe.
  */
 class BnfSyn
 {
 public:
+    /// Creates a new parser for the BNF language.
     BnfSyn();
-    BnfGrammar* analyze(const TokenList& tokens);
+
+    /// Analyzes the tokens from a BNF lexical analyzer.
+    BnfGrammar* analyze(const TokenList* tokens);
 
 private:
-    bool readType(std::string lexeme);
+    /// The following methods implement the rules of the language
     bool syntax();
     bool rule();
     bool expression();
@@ -34,12 +38,26 @@ private:
     bool list();
     bool term();
     bool literal();
+
+    /// Returns whether the current token lexeme matches \p lexeme.
+    bool readType(std::string type);
+
+    /// Simplifies the code to add token to the current expression
     void addTokenToExpression(Token token, BnfExpression* expression);
 
+    /// A reference to the beginning of our tokens list
     TokenList::const_iterator m_Iter;
+
+    /// A reference to the end of our tokens list
     TokenList::const_iterator m_IterEnd;
+
+    /// The BnfGrammar the parsed language produces.
     BnfGrammar* m_Grammar;
+
+    /// The current rule being produced from the BNF input.
     BnfRule* m_CurrentRule;
+
+    /// The current expression being produced from the BNF input.
     BnfExpression* m_CurrentExpression;
 };
 

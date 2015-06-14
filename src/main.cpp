@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     if (tokens->size() <= 0)
         return -2;
     else {
-        BnfGrammar *grammar = syn.analyze(*tokens);
+        BnfGrammar *grammar = syn.analyze(tokens);
         grammar->connectNonTerminals();
 
         if (grammar) {
@@ -37,7 +37,8 @@ int main(int argc, char *argv[])
             grammar->leftFactor();
             grammar->print();
 
-            std::map<BnfRule*, std::set<std::string> > firsts = ll1.first(grammar);
+            //std::map<BnfRule*, std::set<std::string> >* firsts =
+            ll1.first(grammar);
             ll1.printFirstSets();
         }
         else
