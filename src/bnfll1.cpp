@@ -42,7 +42,7 @@ std::map<BnfRule*, std::set<std::string> >* BnfLl1::first(BnfGrammar* grammar)
         firstRule2(*rulesIter);
 
     // Perform rule for as many rules as there are (rule 3 could change content)
-    for (unsigned int i = 0; i < m_FirstSets->size() - rules->size(); i++) {
+    for (unsigned int i = 0; i < rules->size(); i++) {
         for (std::vector<BnfRule*>::iterator rulesIter = rules->begin();
              rulesIter != rules->end(); rulesIter++)
             firstRule3(*rulesIter);

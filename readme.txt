@@ -25,4 +25,6 @@ GNU Compiler Collection (GCC) - g++, mingw
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 From a bash command prompt
 1. g++ -o bnfll1 src/*.cpp
-2. ../lab1c <filename>
+2. ../bnfll1 <filename>
+
+NOTE: tests/data/firstFollow.bnf .
