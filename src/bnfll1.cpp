@@ -10,7 +10,8 @@
 #include "bnfll1.h"
 #include "bnfterm.h"
 #include "token.h"
-#include <QDebug>
+#include <iostream>
+#include <iomanip>
 
 /*!
  * \brief Instantiates a new LL(1) compiler generator.
@@ -77,7 +78,7 @@ void BnfLl1::firstRule2(BnfRule* rule)
 {
     // If the rule is nullable, add λ to the first set
     if (rule->isNullable())
-        (*m_FirstSets)[rule].insert("λ");
+        (*m_FirstSets)[rule].insert("?");
 }
 
 /*!
@@ -110,7 +111,7 @@ void BnfLl1::firstRule3(BnfRule* rule)
             // Add all of the first symbols except lambda
             for (std::set<std::string>::iterator firstsIter = firsts.begin();
                  firstsIter != firsts.end(); firstsIter++) {
-                if (*firstsIter != "λ")
+                if (*firstsIter != "?")
                     (*m_FirstSets)[rule].insert(*firstsIter);
             }
 
@@ -122,7 +123,7 @@ void BnfLl1::firstRule3(BnfRule* rule)
         // If we reached the end, there were no non-nullable rules for the
         // non-terminals -- add lamdba to current rule's first set.
         if (termsIter == (*exprsIter)->end())
-            (*m_FirstSets)[rule].insert("λ");
+            (*m_FirstSets)[rule].insert("?");
     }
 }
 
@@ -135,11 +136,10 @@ void BnfLl1::printFirstSets()
     for (std::map<BnfRule*, std::set<std::string> >::iterator setsIter = m_FirstSets->begin();
          setsIter != m_FirstSets->end(); setsIter++)
     {
-        QDebug debugLine = qDebug();
-        debugLine << ("<" + setsIter->first->ruleName() + ">").c_str() << "{";
+        std::cout  << "<" << setsIter->first->ruleName() << "> " << "{";
         for (std::set<std::string>::iterator firstsIter = setsIter->second.begin();
              firstsIter != setsIter->second.end(); firstsIter++)
-            debugLine << ("\"" + *firstsIter + "\"").c_str();
-        debugLine << "}";
+            std::cout << " \"" << *firstsIter << "\" ";
+        std::cout << "}" << std::endl;
     }
 }

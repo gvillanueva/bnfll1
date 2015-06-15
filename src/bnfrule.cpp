@@ -10,8 +10,7 @@
 #include "bnfrule.h"
 #include "bnfterm.h"
 #include <algorithm>
-#include <QDebug>
-
+#include <iostream>
 /*!
  * \brief This is a predicate to compare expressions for sorting.
  * \param a The first expression.
@@ -55,7 +54,6 @@ BnfRule::BnfRule()
     :m_HasLambda(false)
 {
     m_Expressions = new BnfExpressionVector;
-    qDebug() << __func__ << m_RuleName.c_str();
 }
 
 /*!
@@ -66,7 +64,6 @@ BnfRule::BnfRule(const BnfRule& copy)
     :m_RuleName(copy.m_RuleName), m_Expressions(copy.m_Expressions),
      m_HasLambda(copy.m_HasLambda)
 {
-    qDebug() << __func__ << "copy" << m_RuleName.c_str();
 }
 
 /*!
@@ -91,7 +88,7 @@ void BnfRule::addExpression(BnfExpression* expression)
     else if (!m_HasLambda)
     {
         BnfExpression* lambdaExpr = new BnfExpression;
-        lambdaExpr->push_back(new BnfTerm(Token("λ", "TERM")));
+        lambdaExpr->push_back(new BnfTerm(Token("?", "TERM")));
         m_Expressions->push_back(lambdaExpr);
         m_HasLambda = true;
     }

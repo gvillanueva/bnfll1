@@ -9,7 +9,7 @@
  *              expression terms.
  */
 #include "bnfterm.h"
-#include <QDebug>
+#include <iostream>
 
 /*!
  * \brief Creates a new term for a BNF expression.
@@ -18,7 +18,6 @@
 BnfTerm::BnfTerm(Token token)
     :m_Token(token.lexeme())
 {
-    qDebug() << __func__ << m_Token.c_str();
 }
 
 /*!
@@ -28,7 +27,6 @@ BnfTerm::BnfTerm(Token token)
 BnfTerm::BnfTerm(const BnfTerm& copy)
     :m_Token(copy.m_Token)
 {
-    qDebug() << __func__ << "copy" << m_Token.c_str();
 }
 
 /*!
@@ -38,7 +36,6 @@ BnfTerm::BnfTerm(const BnfTerm& copy)
  */
 BnfTerm& BnfTerm::operator=(const BnfTerm& copy)
 {
-    qDebug() << __func__ << "op=" << m_Token.c_str();
     if (this != &copy)
         m_Token = copy.m_Token;
     return *this;
@@ -100,7 +97,6 @@ bool BnfTerm::isTerm() const
 BnfNonTerminal::BnfNonTerminal(Token token, BnfRule* rule)
     :BnfTerm(token), m_Rule(rule)
 {
-    qDebug() << __func__ << token.lexeme().c_str();
 }
 
 /*!
@@ -110,7 +106,6 @@ BnfNonTerminal::BnfNonTerminal(Token token, BnfRule* rule)
 BnfNonTerminal::BnfNonTerminal(const BnfNonTerminal& copy)
     :BnfTerm(copy), m_Rule(copy.m_Rule)
 {
-    qDebug() << __func__ << "copy" << token().c_str();
 }
 
 /*!

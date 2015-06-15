@@ -1,30 +1,30 @@
-<Program>               ::=     <Definition> <Program> | λ ;
+<Program>               ::=     <Definition> <Program> | ? ;
 
 <Definition>            ::=     "int" <DefinitionN> |
                                 <Identifier> <Parameter_list> <Function_body> ;
 <DefinitionN>           ::=     <Identifier> <DefinitionNN> ;
 <DefinitionNN>          ::=     "(" <DefintionNNN> ")" <DefinitionNNNN> <Function_body> |
                                 <DefinitionNNNNN> ";" ;
-<DefinitionNNN>         ::=     <Identifier_list> | λ ;
-<DefinitionNNNN>        ::=     <Parameter_declaration> <DefinitionNNNN> | λ ;
-<DefinitionNNNNN>       ::=     "," <Identifier> <DefinitionNNNNN> | λ ;
+<DefinitionNNN>         ::=     <Identifier_list> | ? ;
+<DefinitionNNNN>        ::=     <Parameter_declaration> <DefinitionNNNN> | ? ;
+<DefinitionNNNNN>       ::=     "," <Identifier> <DefinitionNNNNN> | ? ;
 
 <Data_definition>       ::=     "int" <Identifier> <Data_definitionN> ";" ;
-<Data_definitionN>      ::=     "," <Identifier> <Data_definitionN> | λ ;
+<Data_definitionN>      ::=     "," <Identifier> <Data_definitionN> | ? ;
 
 <Parameter_list>        ::=	"(" <Parameter_listN> ")" <Parameter_listNN> ;
-<Parameter_listN>       ::=     <Identifier_list> | λ ;
+<Parameter_listN>       ::=     <Identifier_list> | ? ;
 <Parameter_listNN>      ::=     <Parameter_declaration> <Parameter_listNN> ;
 
 <Identifier_list>		::=	<Identifier> <Identifier_listN> ;
-<Identifier_listN>        ::=     "," <Identifier> <Identifier_listN> | λ ;
+<Identifier_listN>        ::=     "," <Identifier> <Identifier_listN> | ? ;
 
 <Parameter_declaration>	 ::=	"int" <Identifier> <Parameter_declarationN> ";" ;
-<Parameter_declarationN> ::=     "," <Identifier> <Parameter_declarationN> | λ ;
+<Parameter_declarationN> ::=     "," <Identifier> <Parameter_declarationN> | ? ;
 
 <Function_body>         ::=     "{" <Function_bodyN> <Function_bodyNN> "}" ;
-<Function_bodyN>        ::=     <Data_defintion> <Function_bodyN> | λ ;
-<Function_bodyNN>       ::=     <Statement> <Function_bodyNN> | λ ;
+<Function_bodyN>        ::=     <Data_defintion> <Function_bodyN> | ? ;
+<Function_bodyNN>       ::=     <Statement> <Function_bodyNN> | ? ;
 
 <Statement>             ::=     "{" <StatementNN> <StatementNNN> "}" |
                                 "if" "(" <Expression> ")" <Statement> <StatementNNNN> |
@@ -35,10 +35,10 @@
                                 <StatementN> ";" |
                                 Identifier "=" "input" "(" ")" ";" |
                                 "output" "(" <Expression> ")" ";" ;
-<StatementN>            ::=     <Expression> | λ ;
-<StatementNN>           ::=     <Data_defintion> <StatementNN> | λ ;
-<StatementNNN>          ::=     <Statement> <StatementNNN> | λ ;
-<StatementNNNN>         ::=     "else" <Statement> | λ ;
+<StatementN>            ::=     <Expression> | ? ;
+<StatementNN>           ::=     <Data_defintion> <StatementNN> | ? ;
+<StatementNNN>          ::=     <Statement> <StatementNNN> | ? ;
+<StatementNNNN>         ::=     "else" <Statement> | ? ;
 
 <Expression>		::=	<Identifier> |
                                 <Identifier> <ExpressionN> |
@@ -66,7 +66,7 @@
                                  "/" <Expression> |
                                  "%" <Expression> |
                                  "(" <ExpressionNN> ")" ;
-<ExpressionNN>          ::=     <Argument_list> | λ ;
+<ExpressionNN>          ::=     <Argument_list> | ? ;
 
 <Argument_list>         ::=     <Expression> <Argument_listN> ;
-<Argument_listN>        ::=    "," <Expression> <Argument_listN> | λ ;
+<Argument_listN>        ::=    "," <Expression> <Argument_listN> | ? ;

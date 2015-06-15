@@ -9,7 +9,7 @@
  */
 #include "bnfgrammar.h"
 #include "bnfterm.h"
-#include <QDebug>
+#include <iostream>
 #include <typeinfo>
 
 /*!
@@ -132,8 +132,7 @@ void BnfGrammar::print()
          rule != m_Rules->end(); rule++)
     {
         // Output the rule name
-        QDebug debugLine = qDebug();
-        debugLine << ("<" + (*rule)->ruleName() + ">").c_str() << "->";
+        std::cout << ("<" + (*rule)->ruleName() + ">").c_str() << "->";
 
         // Iterate the expressions in the rul
         for (std::vector<BnfExpression*>::iterator expr = (*rule)->m_Expressions->begin();
@@ -145,15 +144,16 @@ void BnfGrammar::print()
             {
                 // If the term is terminal, wrap it in ""
                 if ((*term)->isTerm())
-                    debugLine << ("\"" + (*term)->m_Token + "\"").c_str();
+                    std::cout << ("\"" + (*term)->m_Token + "\"").c_str();
                 // If the term is non-terminal, wrap it in <>
                 else
-                    debugLine << ("<" + (*term)->m_Token + ">").c_str();
+                    std::cout << ("<" + (*term)->m_Token + ">").c_str();
             }
 
             // If this is not the last expression, add a "|"
             if (expr+1 != (*rule)->m_Expressions->end())
-                debugLine << "|";
+                std::cout << "|";
         }
+        std::cout << std::endl;
     }
 }
