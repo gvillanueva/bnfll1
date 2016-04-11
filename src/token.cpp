@@ -25,6 +25,35 @@ Token::Token(std::string lexeme, std::string type, std::string source, int line,
 }
 
 /*!
+ * \brief Instantiates a Token object using deep-copies of another Token's
+ *        values.
+ * \param copy The existing Token object to copy.
+ */
+Token::Token(const Token& copy)
+    : m_Lexeme(copy.m_Lexeme), m_Type(copy.m_Type), m_Source(copy.m_Source),
+      m_Line(copy.m_Line), m_Column(copy.m_Column)
+{
+}
+
+/*!
+ * \brief Copies the values of one Token object to another.
+ * \param copy The object to copy.
+ * \return Reference to the Token object that copied the values.
+ */
+Token& Token::operator=(const Token& copy)
+{
+    if (this != &copy)
+    {
+        m_Lexeme = copy.m_Lexeme;
+        m_Type = copy.m_Type;
+        m_Source = copy.m_Source;
+        m_Line = copy.m_Line;
+        m_Column = copy.m_Column;
+    }
+    return *this;
+}
+
+/*!
  * \brief Gets the specific instance of the generic token type.
  * \return String representing the token's characters.
  */

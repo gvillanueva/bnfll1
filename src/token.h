@@ -23,6 +23,12 @@ public:
     Token(std::string lexeme, std::string type, std::string source = "",
           int line = 0, int column = 0);
 
+    /// Instantiates a Token object using copies of another Token's values.
+    Token(const Token& copy);
+
+    /// Copies the values of one Token object to another.
+    Token& operator=(const Token& copy);
+
     /// Gets the specific instance of the generic token type.
     std::string lexeme() const;
 

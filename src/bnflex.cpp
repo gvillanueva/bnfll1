@@ -1,3 +1,13 @@
+/*!
+ * \author      Giancarlo Villanueva
+ * \date        Created,  6/1/2015
+ *              Modified, 6/14/2015
+ * \ingroup     bnfll1
+ * \file        bnflex.cpp
+ *
+ * \brief       Defines the methods of the Backus-Naur Form lexical analyzer
+ *              class.
+ */
 #include "bnflex.h"
 #include "token.h"
 #include <stdio.h>
@@ -16,13 +26,10 @@ enum BNF_LEX_STATE
 };
 
 /*!
- * \brief Reads characters from input stream to form known tokens.
+ * \brief Returns a list of parsed tokens from the input file.
  * \param istream   An input stream to tokenize.
  * \param filename  Name of the file we may be parsing.
  * \return Pointer to a list of tokens found in the input stream.
- *
- * This function needs a populated symbol table to function correctly. You must
- * populate the table with keywords, if they exist.
  */
 TokenList* BnfLex::analyze(std::istream &istream, const char *filename)
 {
@@ -33,7 +40,6 @@ TokenList* BnfLex::analyze(std::istream &istream, const char *filename)
     int col = 0;
 
     std::string token;      /// Token being parsed
-    std::string error;      /// Error string
     TokenList *tokens = new TokenList;
 
     while (istream.get(ch) || token.length() && (ch = ' '))
@@ -46,6 +52,10 @@ TokenList* BnfLex::analyze(std::istream &istream, const char *filename)
 
                 if (ch == '|')
                     tokens->push_back(Token("|", "|", filename, line, col));
+                else if (ch == ';')
+                    tokens->push_back(Token(";", ";", filename, line, col));
+                else if (ch == '?')
+                    tokens->push_back(Token("?", "TERM", filename, line, col));
                 else if (ch == '<')
                     state = NONTERMINAL_START;
                 else if (ch == '"')

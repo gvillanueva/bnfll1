@@ -1,0 +1,3 @@
+<personal-part>     ::= <initial> "." | <first-name> ;
+
+<personal-part>     ::= <house-num> <street-name> <opt-apt-num> <EOL> ;
